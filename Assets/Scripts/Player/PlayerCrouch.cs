@@ -4,29 +4,19 @@ using UnityEngine;
 
 public class PlayerCrouch : MonoBehaviour
 {
-    private bool IsCrouched;
-    public bool isCrouched
-    {
-        get => IsCrouched;
-        set
-        {
-            IsCrouched = value;
-            ToggleCrouch(IsCrouched);
-        }
-    }
+    public bool isCrouched;
 
     void ToggleCrouch(bool value)
     {
-        if (value) Crouch();
-        else DeCrouch();
+        
     }
 
-    void Crouch()
+    public void Crouch()
     {
 
     }
 
-    void DeCrouch()
+    public void DeCrouch()
     {
 
     }
