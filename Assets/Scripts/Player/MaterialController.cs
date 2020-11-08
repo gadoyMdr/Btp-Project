@@ -9,17 +9,14 @@ public class MaterialController : MonoBehaviour
 
     private EquipItem _equipItem;
 
-    private void Awake()
-    {
-        _equipItem = GetComponent<EquipItem>();
-    }
+    private void Awake() => _equipItem = GetComponent<EquipItem>();
+    
 
+    //Rotate with scroll wheel
     public void RotateMaterial(float x)
     {
         if (_equipItem.currentMaterial != null)
-        {
             if (_equipItem.currentMaterial.TryGetComponent(out RotateMaterials rotateMaterials))
                 rotateMaterials.Rotate(x);
-        }
     }
 }

@@ -8,6 +8,7 @@ public class Material : MonoBehaviour
     [HideInInspector]
     public Rigidbody2D _rigidbody;
 
+    //used so we don't pick up the item when it's already picked up
     [HideInInspector]
     public bool isPickedUp = false;
 

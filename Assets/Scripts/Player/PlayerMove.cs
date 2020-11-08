@@ -46,22 +46,20 @@ public class PlayerMove : MonoBehaviour
     private float currentSpeed;
     private Rigidbody2D _rigidbody;
 
-    private void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
-    }
+    private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
+    
 
-    private void Start()
-    {
-        currentSpeed = baseSpeed;
-    }
+    private void Start() => currentSpeed = baseSpeed;
+    
 
     private void Update()
     {
         if (direction != 0) Move();
         else DecreaseSpeed();
     }
-
+    
+    //Move 
+    //Consider refactoring
     public void Move()
     {
         _rigidbody.velocity = new Vector2(
@@ -71,7 +69,7 @@ public class PlayerMove : MonoBehaviour
             _rigidbody.velocity.y);
 
     }
-
+    //Decrease speed when the player doesnt input any movement
     void DecreaseSpeed()
     {
         _rigidbody.velocity = new Vector2(
@@ -79,6 +77,8 @@ public class PlayerMove : MonoBehaviour
             _rigidbody.velocity.y);
     }
 
+    //flip visuals 
+    //TODO : update : visuals need to change to the whole transform
     void FlipVisuals()
     {
         if(direction != 0)

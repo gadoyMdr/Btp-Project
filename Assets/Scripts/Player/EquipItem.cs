@@ -47,7 +47,7 @@ public class EquipItem : MonoBehaviour
     }
 
 
-
+    //Equip
     void ActuallyEquip(Material materialToEquip)
     {   
         currentMaterial = materialToEquip;
@@ -57,6 +57,7 @@ public class EquipItem : MonoBehaviour
         PlaceMaterial(materialToEquip);
     }
 
+    //Throw away current material
     void DropCurrentMaterial()
     {
         if(currentMaterial != null)
@@ -75,6 +76,7 @@ public class EquipItem : MonoBehaviour
         materialToPlace.transform.SetParent(carryPoint);
     }
 
+    //Make the material follow the player
     void SetMaterialPos()
     {
         if (currentMaterial != null) currentMaterial.transform.position = carryPoint.transform.position;
