@@ -26,8 +26,10 @@ public class PlayerMove : MonoBehaviour
     public float multiSpeed;
 
     [HideInInspector]
-    public float Direction;
-    public float direction
+    public int facingDirection;
+
+    private int Direction;
+    public int direction
     {
         get => Direction;
         set
@@ -80,10 +82,15 @@ public class PlayerMove : MonoBehaviour
     void FlipVisuals()
     {
         if(direction != 0)
-        _playerVisuals.rotation = Quaternion.Euler(
+        {
+            facingDirection = direction;
+
+            _playerVisuals.rotation = Quaternion.Euler(
              _playerVisuals.transform.rotation.x,
              direction < 0 ? 0 : 180,
              _playerVisuals.transform.rotation.y
             );
+        }
+        
     }
 }

@@ -7,7 +7,7 @@ public class ControlManager : MonoBehaviour
     PlayerCrouch playerCrouch;
     PlayerJump playerJump;
     PlayerMove playerMove;
-
+    MaterialController materialController;
     Controls controls;
 
     private void Awake()
@@ -17,6 +17,7 @@ public class ControlManager : MonoBehaviour
         playerCrouch = FindObjectOfType<PlayerCrouch>();
         playerJump = playerCrouch.GetComponent<PlayerJump>();
         playerMove = playerCrouch.GetComponent<PlayerMove>();
+        materialController = playerCrouch.GetComponent<MaterialController>();
     }
 
     void Start()
@@ -31,16 +32,20 @@ public class ControlManager : MonoBehaviour
 
         controls.PlayerMovements.Down.performed += _ => playerCrouch.Crouch();
         controls.PlayerMovements.Down.performed += _ => playerCrouch.DeCrouch();
+
+        controls.PlayerMaterials.Scroll.performed += x => materialController.RotateMaterial(x.ReadValue<float>());
     }
 
     private void OnEnable()
     {
         controls.PlayerMovements.Enable();
+        controls.PlayerMaterials.Enable();
     }
 
     private void OnDisable()
     {
         controls.PlayerMovements.Disable();
+        controls.PlayerMaterials.Disable();
     }
 }
 

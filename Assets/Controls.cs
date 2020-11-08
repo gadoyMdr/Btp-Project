@@ -97,6 +97,33 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""PlayerMaterials"",
+            ""id"": ""1a30a356-75a7-4b49-87b8-eae63667cc9f"",
+            ""actions"": [
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4e6d36b9-26a2-4225-b6d3-a7c685751120"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6f4e1842-b670-40af-a2f7-5e6a30a66456"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -107,6 +134,9 @@ public class @Controls : IInputActionCollection, IDisposable
         m_PlayerMovements_Right = m_PlayerMovements.FindAction("Right", throwIfNotFound: true);
         m_PlayerMovements_Up = m_PlayerMovements.FindAction("Up", throwIfNotFound: true);
         m_PlayerMovements_Down = m_PlayerMovements.FindAction("Down", throwIfNotFound: true);
+        // PlayerMaterials
+        m_PlayerMaterials = asset.FindActionMap("PlayerMaterials", throwIfNotFound: true);
+        m_PlayerMaterials_Scroll = m_PlayerMaterials.FindAction("Scroll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -209,11 +239,48 @@ public class @Controls : IInputActionCollection, IDisposable
         }
     }
     public PlayerMovementsActions @PlayerMovements => new PlayerMovementsActions(this);
+
+    // PlayerMaterials
+    private readonly InputActionMap m_PlayerMaterials;
+    private IPlayerMaterialsActions m_PlayerMaterialsActionsCallbackInterface;
+    private readonly InputAction m_PlayerMaterials_Scroll;
+    public struct PlayerMaterialsActions
+    {
+        private @Controls m_Wrapper;
+        public PlayerMaterialsActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Scroll => m_Wrapper.m_PlayerMaterials_Scroll;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerMaterials; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerMaterialsActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerMaterialsActions instance)
+        {
+            if (m_Wrapper.m_PlayerMaterialsActionsCallbackInterface != null)
+            {
+                @Scroll.started -= m_Wrapper.m_PlayerMaterialsActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_PlayerMaterialsActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_PlayerMaterialsActionsCallbackInterface.OnScroll;
+            }
+            m_Wrapper.m_PlayerMaterialsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+            }
+        }
+    }
+    public PlayerMaterialsActions @PlayerMaterials => new PlayerMaterialsActions(this);
     public interface IPlayerMovementsActions
     {
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
         void OnUp(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
+    }
+    public interface IPlayerMaterialsActions
+    {
+        void OnScroll(InputAction.CallbackContext context);
     }
 }

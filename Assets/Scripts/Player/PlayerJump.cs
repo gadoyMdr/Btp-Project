@@ -18,8 +18,20 @@ public class PlayerJump : MonoBehaviour
 
     #endregion
 
+    private Rigidbody2D _rigidbody;
+
+    private void Awake()
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        currentJumpHeight = baseJumpHeight;
+    }
+
     public void Jump()
     {
-
+        _rigidbody.AddForce(Vector2.up * currentJumpHeight, ForceMode2D.Impulse);
     }
 }
