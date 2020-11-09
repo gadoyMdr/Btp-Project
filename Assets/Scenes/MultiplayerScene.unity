@@ -153,6 +153,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85728f43a51b78d43abb1114c8d9e8c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pvCache: {fileID: 0}
+  photonManager: {fileID: 0}
+  multiplayerUI: {fileID: 0}
 --- !u!4 &68310240
 Transform:
   m_ObjectHideFlags: 0
@@ -502,6 +505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkMessage: {fileID: 374067518}
   backGround: {fileID: 2064151458}
+  photonManager: {fileID: 0}
 --- !u!222 &544916466
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -811,6 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f24bf06ceb786741983f5346ce183ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pvCache: {fileID: 0}
 --- !u!4 &1181491816
 Transform:
   m_ObjectHideFlags: 0
@@ -899,7 +904,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 20}
+  m_SizeDelta: {x: 0, y: 12.4086}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1498666355
 MonoBehaviour:

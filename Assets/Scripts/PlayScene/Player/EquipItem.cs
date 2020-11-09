@@ -1,13 +1,16 @@
-using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerMove))]
+[RequireComponent(typeof(PlaceMaterial))]
 public class EquipItem : MonoBehaviour
 {
-    [HideInInspector]
-    public Material currentMaterial;
+    public Action EquipEvent;
+    public Action UnEquipEvent;
+
+    public Material currentMaterial { get; private set; }
 
     [SerializeField]
     private Transform carryPoint;
@@ -18,6 +21,13 @@ public class EquipItem : MonoBehaviour
     [SerializeField]
     [Range(1, 20)]
     private float dropForce;
+
+    private PlaceMaterial _placeMaterial;
+
+    private void Awake()
+    {
+        _placeMaterial = GetComponent<PlaceMaterial>();
+    }
 
     private void Update()
     {
@@ -34,15 +44,22 @@ public class EquipItem : MonoBehaviour
         return currentMaterial == null && !material.isPickedUp;
     }
 
+    public void UnEquip()
+    {
+        UnEquipEvent?.Invoke();
+        currentMaterial.SwitchToDropped();
+        currentMaterial = null;
+    }
+
     /// <summary>
     /// Switch materials
     /// </summary>
     /// <param name="materialToEquip"></param>
     public void SwitchMaterial(Material materialToEquip)
     {
-        if (materialToEquip.canBePickedUp && PhotonNetwork.IsMasterClient)
+        if (materialToEquip.canBePickedUp)
         {
-            DropCurrentMaterial();
+            _placeMaterial.PlaceMaterialFunction(materialToEquip, currentMaterial.transform.position, currentMaterial.transform.rotation);
             ActuallyEquip(materialToEquip);
         }
         
@@ -57,6 +74,8 @@ public class EquipItem : MonoBehaviour
         currentMaterial.SwitchToPickedUp();
 
         PlaceMaterial(materialToEquip);
+
+        EquipEvent?.Invoke();
     }
 
     //Throw away current material
@@ -65,6 +84,7 @@ public class EquipItem : MonoBehaviour
         if(currentMaterial != null)
         {
             currentMaterial.transform.SetParent(null);
+            UnEquipEvent?.Invoke();
             currentMaterial.transform.position = dropPoint.position;
             currentMaterial.SwitchToDropped();
             currentMaterial = null;

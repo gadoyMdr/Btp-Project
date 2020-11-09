@@ -13,7 +13,9 @@ public class Material : MonoBehaviour
     
     public bool isPickedUp = false;
 
-    private SpriteRenderer _spriteRenderer;
+    [HideInInspector]
+    public SpriteRenderer _spriteRenderer;
+
     private Color baseColor;
     public bool canBePickedUp;
 
@@ -61,4 +63,5 @@ public class Material : MonoBehaviour
         }
         
     }
+
 }

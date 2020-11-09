@@ -144,10 +144,10 @@
             "id": "3a8836df-db73-4e21-91c2-de1de3dd1aa6",
             "actions": [
                 {
-                    "name": "MousePosition",
-                    "type": "Value",
-                    "id": "7599a5c0-4bd6-4ebd-a965-ca431aa9df12",
-                    "expectedControlType": "Vector2",
+                    "name": "LeftClick",
+                    "type": "Button",
+                    "id": "276a739e-6794-45e4-89d0-dbfb9f65fc14",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -155,12 +155,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "a4aebeeb-9c42-4ea3-9b55-0497e9a781c2",
-                    "path": "<Mouse>/position",
+                    "id": "2d7d445a-5a53-45fb-979b-813a46893088",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "MousePosition",
+                    "action": "LeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

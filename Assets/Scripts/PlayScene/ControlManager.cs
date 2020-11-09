@@ -16,12 +16,12 @@ public class ControlManager : MonoBehaviour
         controls = new Controls();
     }
 
-    public void SetPlayer(Player player)
+    public void Start()
     {
-        playerCrouch = player.GetComponent<PlayerCrouch>();
-        playerJump = player.GetComponent<PlayerJump>();
-        playerMove = player.GetComponent<PlayerMove>();
-        materialController = player.GetComponent<MaterialController>();
+        playerCrouch = FindObjectOfType< PlayerCrouch>();
+        playerJump = playerCrouch.GetComponent<PlayerJump>();
+        playerMove = playerCrouch.GetComponent<PlayerMove>();
+        materialController = playerCrouch.GetComponent<MaterialController>();
         playSceneUIManager = FindObjectOfType<PlaySceneUIManager>();
 
         SetControlsCallBacks();

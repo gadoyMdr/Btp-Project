@@ -1,4 +1,3 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,12 +20,6 @@ public class PlaySceneUIManager : MonoBehaviour
     {
         isPaused = value ?? !isPaused;
         pauseCanvas.gameObject.SetActive(isPaused);
-    }
-
-    public void GoMultiplayerScene()
-    {
-        PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("MultiplayerScene");
     }
 
 }
