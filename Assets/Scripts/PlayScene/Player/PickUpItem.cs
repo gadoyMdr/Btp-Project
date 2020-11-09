@@ -56,25 +56,32 @@ public class PickUpItem : MonoBehaviour
                            .gameObject //Grab GameObject
                            .GetComponent<Material>(); //Grab its material
 
-        if (nearestMaterial != null) _equipItem.TryEquip(nearestMaterial);
+        if (nearestMaterial != null)
+            if (_equipItem.TryEquip(nearestMaterial))
+                ResetAllMaterials();
 
     }
 
+
+    //TODO : restructure that thing
     void CheckIfMouseHoverMaterial()
     {
         Material hoveredMaterial = hoverDetection.DetectHoverGameObject();
 
-        if(hoveredMaterial != null)
+        if (hoveredMaterial != null)
         {
             hoveredMaterial.SetToHovered(Vector3.Distance(hoveredMaterial.transform.position, transform.position) < maxRange);
 
             if (Mouse.current.leftButton.isPressed && hoveredMaterial.canBePickedUp)
                 _equipItem.SwitchMaterial(hoveredMaterial);
-            
+
         }
         else
-            FindObjectsOfType<Material>().ToList().ForEach(x => x.SetToHovered(null));
+            ResetAllMaterials();
 
     }
+
+    //TODO : restructure that thing
+    void ResetAllMaterials() => FindObjectsOfType<Material>().ToList().ForEach(x => x.SetToHovered(null));
 
 }

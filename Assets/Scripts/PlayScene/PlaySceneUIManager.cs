@@ -19,7 +19,7 @@ public class PlaySceneUIManager : MonoBehaviour
 
     public void TogglePause(bool? value)
     {
-        isPaused = value.HasValue? value.Value : !isPaused;
+        isPaused = value ?? !isPaused;
         pauseCanvas.gameObject.SetActive(isPaused);
     }
 

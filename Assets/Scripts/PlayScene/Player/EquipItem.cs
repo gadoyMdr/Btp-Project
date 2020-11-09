@@ -28,10 +28,10 @@ public class EquipItem : MonoBehaviour
     /// Equip 'material' if there isn't any current
     /// </summary>
     /// <param name="materialToEquip">Material to Equip</param>
-    public void TryEquip(Material material)
+    public bool TryEquip(Material material)
     {
-        if(PhotonNetwork.IsMasterClient)
-            if (currentMaterial == null && !material.isPickedUp) ActuallyEquip(material);
+        if (currentMaterial == null && !material.isPickedUp) ActuallyEquip(material);
+        return currentMaterial == null && !material.isPickedUp;
     }
 
     /// <summary>
