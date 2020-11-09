@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,15 +13,11 @@ public class EquipItem : MonoBehaviour
     private Transform carryPoint;
 
     [SerializeField]
+    private Transform dropPoint;
+
+    [SerializeField]
     [Range(1, 20)]
     private float dropForce;
-
-    private PlayerMove _playerMove;
-
-    private void Awake()
-    {
-        _playerMove = GetComponent<PlayerMove>();
-    }
 
     private void Update()
     {
@@ -33,7 +30,8 @@ public class EquipItem : MonoBehaviour
     /// <param name="materialToEquip">Material to Equip</param>
     public void TryEquip(Material material)
     {
-        if (currentMaterial == null) ActuallyEquip(material);
+        if(PhotonNetwork.IsMasterClient)
+            if (currentMaterial == null && !material.isPickedUp) ActuallyEquip(material);
     }
 
     /// <summary>
@@ -42,8 +40,12 @@ public class EquipItem : MonoBehaviour
     /// <param name="materialToEquip"></param>
     public void SwitchMaterial(Material materialToEquip)
     {
-        DropCurrentMaterial();
-        ActuallyEquip(materialToEquip);
+        if (materialToEquip.canBePickedUp && PhotonNetwork.IsMasterClient)
+        {
+            DropCurrentMaterial();
+            ActuallyEquip(materialToEquip);
+        }
+        
     }
 
 
@@ -63,9 +65,9 @@ public class EquipItem : MonoBehaviour
         if(currentMaterial != null)
         {
             currentMaterial.transform.SetParent(null);
-            currentMaterial._rigidbody.AddForce(new Vector2(_playerMove.direction, 1) * dropForce, ForceMode2D.Impulse);
-            currentMaterial = null;
+            currentMaterial.transform.position = dropPoint.position;
             currentMaterial.SwitchToDropped();
+            currentMaterial = null;
         }
         
     }
@@ -79,7 +81,7 @@ public class EquipItem : MonoBehaviour
     //Make the material follow the player
     void SetMaterialPos()
     {
-        if (currentMaterial != null) currentMaterial.transform.position = carryPoint.transform.position;
+        if (currentMaterial != null) currentMaterial.transform.position = carryPoint.position;
     }
 
     

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(EquipItem))]
 public class PickUpItem : MonoBehaviour
@@ -17,8 +18,13 @@ public class PickUpItem : MonoBehaviour
     private float checkDelay;
 
     private EquipItem _equipItem;
+    private GameObjectHoverDetection hoverDetection;
 
-    private void Awake() => _equipItem = GetComponent<EquipItem>();
+    private void Awake()
+    {
+        hoverDetection = FindObjectOfType<GameObjectHoverDetection>();
+        _equipItem = GetComponent<EquipItem>();
+    }
     
 
     void Start() => StartCoroutine(CheckForItemCoroutine());
@@ -37,6 +43,7 @@ public class PickUpItem : MonoBehaviour
     {
         yield return new WaitForSeconds(checkDelay);
         CheckNearestItemAround();
+        CheckIfMouseHoverMaterial();
         StartCoroutine(CheckForItemCoroutine());
     }
 
@@ -49,7 +56,24 @@ public class PickUpItem : MonoBehaviour
                            .gameObject //Grab GameObject
                            .GetComponent<Material>(); //Grab its material
 
-        if (nearestMaterial != null && !nearestMaterial.isPickedUp) _equipItem.TryEquip(nearestMaterial);
+        if (nearestMaterial != null) _equipItem.TryEquip(nearestMaterial);
+
+    }
+
+    void CheckIfMouseHoverMaterial()
+    {
+        Material hoveredMaterial = hoverDetection.DetectHoverGameObject();
+
+        if(hoveredMaterial != null)
+        {
+            hoveredMaterial.SetToHovered(Vector3.Distance(hoveredMaterial.transform.position, transform.position) < maxRange);
+
+            if (Mouse.current.leftButton.isPressed && hoveredMaterial.canBePickedUp)
+                _equipItem.SwitchMaterial(hoveredMaterial);
+            
+        }
+        else
+            FindObjectsOfType<Material>().ToList().ForEach(x => x.SetToHovered(null));
 
     }
 

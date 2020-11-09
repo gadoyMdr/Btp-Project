@@ -124,6 +124,60 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""0b8bbf94-660e-4d6e-a5cb-2fede9805895"",
+            ""actions"": [
+                {
+                    ""name"": ""TogglePause"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd17b5d6-3968-4fb9-9289-b3eab2b24ea2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""67c9c69a-8213-4b03-b5ec-62091d26c1b4"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TogglePause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Mouse"",
+            ""id"": ""3a8836df-db73-4e21-91c2-de1de3dd1aa6"",
+            ""actions"": [
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""7599a5c0-4bd6-4ebd-a965-ca431aa9df12"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a4aebeeb-9c42-4ea3-9b55-0497e9a781c2"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -137,6 +191,12 @@ public class @Controls : IInputActionCollection, IDisposable
         // PlayerMaterials
         m_PlayerMaterials = asset.FindActionMap("PlayerMaterials", throwIfNotFound: true);
         m_PlayerMaterials_Scroll = m_PlayerMaterials.FindAction("Scroll", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_TogglePause = m_UI.FindAction("TogglePause", throwIfNotFound: true);
+        // Mouse
+        m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
+        m_Mouse_MousePosition = m_Mouse.FindAction("MousePosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -272,6 +332,72 @@ public class @Controls : IInputActionCollection, IDisposable
         }
     }
     public PlayerMaterialsActions @PlayerMaterials => new PlayerMaterialsActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_TogglePause;
+    public struct UIActions
+    {
+        private @Controls m_Wrapper;
+        public UIActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @TogglePause => m_Wrapper.m_UI_TogglePause;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void SetCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            {
+                @TogglePause.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePause;
+                @TogglePause.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePause;
+                @TogglePause.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTogglePause;
+            }
+            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @TogglePause.started += instance.OnTogglePause;
+                @TogglePause.performed += instance.OnTogglePause;
+                @TogglePause.canceled += instance.OnTogglePause;
+            }
+        }
+    }
+    public UIActions @UI => new UIActions(this);
+
+    // Mouse
+    private readonly InputActionMap m_Mouse;
+    private IMouseActions m_MouseActionsCallbackInterface;
+    private readonly InputAction m_Mouse_MousePosition;
+    public struct MouseActions
+    {
+        private @Controls m_Wrapper;
+        public MouseActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MousePosition => m_Wrapper.m_Mouse_MousePosition;
+        public InputActionMap Get() { return m_Wrapper.m_Mouse; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MouseActions set) { return set.Get(); }
+        public void SetCallbacks(IMouseActions instance)
+        {
+            if (m_Wrapper.m_MouseActionsCallbackInterface != null)
+            {
+                @MousePosition.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnMousePosition;
+            }
+            m_Wrapper.m_MouseActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
+            }
+        }
+    }
+    public MouseActions @Mouse => new MouseActions(this);
     public interface IPlayerMovementsActions
     {
         void OnLeft(InputAction.CallbackContext context);
@@ -282,5 +408,13 @@ public class @Controls : IInputActionCollection, IDisposable
     public interface IPlayerMaterialsActions
     {
         void OnScroll(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnTogglePause(InputAction.CallbackContext context);
+    }
+    public interface IMouseActions
+    {
+        void OnMousePosition(InputAction.CallbackContext context);
     }
 }

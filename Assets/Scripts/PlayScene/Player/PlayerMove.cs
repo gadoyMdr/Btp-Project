@@ -25,8 +25,6 @@ public class PlayerMove : MonoBehaviour
     [HideInInspector]
     public float multiSpeed;
 
-    [HideInInspector]
-    public int facingDirection;
 
     private int Direction;
     public int direction
@@ -79,8 +77,6 @@ public class PlayerMove : MonoBehaviour
     {
         if(direction != 0)
         {
-            facingDirection = direction;
-
             transform.rotation = Quaternion.Euler(
              transform.transform.rotation.x,
              direction < 0 ? 0 : 180,

@@ -9,6 +9,7 @@ public class ControlManager : MonoBehaviour
     PlayerMove playerMove;
     MaterialController materialController;
     Controls controls;
+    PlaySceneUIManager playSceneUIManager;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class ControlManager : MonoBehaviour
         playerJump = player.GetComponent<PlayerJump>();
         playerMove = player.GetComponent<PlayerMove>();
         materialController = player.GetComponent<MaterialController>();
+        playSceneUIManager = FindObjectOfType<PlaySceneUIManager>();
 
         SetControlsCallBacks();
     }
@@ -39,18 +41,22 @@ public class ControlManager : MonoBehaviour
         controls.PlayerMovements.Down.performed += _ => playerCrouch.DeCrouch();
 
         controls.PlayerMaterials.Scroll.performed += x => materialController.RotateMaterial(x.ReadValue<float>());
+
+        controls.UI.TogglePause.performed += _ => playSceneUIManager.TogglePause(null);
     }
 
     private void OnEnable()
     {
         controls.PlayerMovements.Enable();
         controls.PlayerMaterials.Enable();
+        controls.UI.Enable();
     }
 
     private void OnDisable()
     {
         controls.PlayerMovements.Disable();
         controls.PlayerMaterials.Disable();
+        controls.UI.Disable();
     }
 }
 
