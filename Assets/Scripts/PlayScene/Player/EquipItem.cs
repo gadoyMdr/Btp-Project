@@ -58,7 +58,7 @@ public class EquipItem : MonoBehaviour
     /// <param name="materialToEquip"></param>
     public void SwitchMaterial(Material materialToEquip)
     {
-        if (materialToEquip.canBePickedUp)
+        if (materialToEquip.materialState.canBePickedUp)
         {
             _placeMaterial.PlaceMaterialFunction(currentMaterial, materialToEquip.transform.position, currentMaterial.transform.rotation);
             ActuallyEquip(materialToEquip);
@@ -70,6 +70,7 @@ public class EquipItem : MonoBehaviour
     //Equip
     void ActuallyEquip(Material materialToEquip)
     {
+
         materialToEquip.gameObject.layer = LayerMask.NameToLayer("CarriedMaterial");
 
         currentMaterial = materialToEquip;

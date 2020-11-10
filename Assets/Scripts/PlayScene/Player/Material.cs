@@ -15,21 +15,18 @@ public class Material : MonoBehaviour
     //used so we don't pick up the item when it's already picked up
     public bool isPickedUp = false;
 
-    public bool canBePickedUp;
-
-    private Hover Hover;
-    public Hover hover
+    private MaterialState MaterialState;
+    public MaterialState materialState
     {
-        get => Hover;
+        get => MaterialState;
         set
         {
-            Hover = value;
-            UpdateHover();
+            MaterialState = value;
+            UpdateState();
         }
     }
 
     
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -38,7 +35,6 @@ public class Material : MonoBehaviour
 
     public void SwitchToPickedUp()
     {
-        canBePickedUp = false;
         isPickedUp = true;
         _rigidbody.gravityScale = 0;
     }
@@ -56,25 +52,9 @@ public class Material : MonoBehaviour
     /// <param name="value"></param>
     /// 
 
-    void UpdateHover()
+    void UpdateState()
     {
-
-    }
-
-    public void SetToHovered(bool? value)
-    {
-        if (value.HasValue)
-        {
-            canBePickedUp = value.Value;
-            if (value.Value) _spriteRenderer.color = new Color(0, 255, 0, 0.4f);
-            else _spriteRenderer.color = new Color(255, 0, 0, 0.4f); ;
-        }
-        else
-        {
-            canBePickedUp = false;
-            _spriteRenderer.color = Color.white;
-        }
-        
+        _spriteRenderer.color = materialState.color;
     }
 
 }

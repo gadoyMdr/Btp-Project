@@ -6,12 +6,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(EquipItem))]
+[RequireComponent(typeof(MaterialProjection))]
 public class HoverMaterial : MonoBehaviour
 {
-    public Action<int> MouseChangingMaterialEvent;
-
-    [SerializeField]
-    private float checkDelay = 0.1f;
 
     [SerializeField]
     private float maxRange = 5;
@@ -19,61 +16,93 @@ public class HoverMaterial : MonoBehaviour
     [HideInInspector]
     public Material currentlyHoveredMaterial;
 
-    private GameObjectHoverDetection hoverDetection;
-    private EquipItem equipItem;
+    private EquipItem _equipItem;
+    private MaterialProjection _materialProjection;
+    private Material lastMaterial = null;
+    private bool gate = false;
+
     private void Awake()
     {
-        hoverDetection = FindObjectOfType<GameObjectHoverDetection>();
-        equipItem = GetComponent<EquipItem>();
+        _equipItem = GetComponent<EquipItem>();
+        _materialProjection = GetComponent<MaterialProjection>();
     }
 
-    void Start()
+    private void Update()
     {
-        StartCoroutine(CheckForItemCoroutine());
+        DetectHoverGameObject();
     }
 
-    //TODO : restructure that thing
-    void CheckIfMouseHoverMaterial()
-    {
-        Material hoveredMaterial = hoverDetection.DetectHoverGameObject(out _);
 
-        //If we're currently hovering a material
-        if (hoveredMaterial != null)
+    public Material DetectHoverGameObject()
+    {
+
+        Vector2 hitPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        if (Vector2.Distance(hitPos, transform.position) > maxRange)
         {
+            ExitMaterial(lastMaterial);
+            return null;
+        }
 
-            //If we are carrying a material
-            if (equipItem.currentMaterial != null)
+        RaycastHit2D hit = Physics2D.Raycast(hitPos, Vector2.zero);
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.TryGetComponent(out Material material) && hit.collider.gameObject.layer != LayerMask.NameToLayer("CarriedMaterial"))
             {
-                //If we're not hovering the material we're carrying
-                if (!equipItem.currentMaterial.Equals(hoveredMaterial))
+
+                if (lastMaterial = null)
                 {
-                    hoveredMaterial.SetToHovered(Vector2.Distance(hoveredMaterial.transform.position, transform.position) < maxRange);
-                    MouseChangingMaterialEvent?.Invoke(1);
-                    currentlyHoveredMaterial = hoveredMaterial;
+                    EnterMaterial(material);
+                    gate = true;
                 }
 
+                if (CheckIfLastMaterialIsEqualToCurrentlyHoveredOne(material))
+                {
+                    ExitMaterial(lastMaterial);
+                    return null;
+                }
+
+                EnterMaterial(material);
+                gate = true;
             }
-            else
-            {
-                hoveredMaterial.SetToHovered(Vector2.Distance(hoveredMaterial.transform.position, transform.position) < maxRange);
-                MouseChangingMaterialEvent?.Invoke(1);
-                currentlyHoveredMaterial = hoveredMaterial;
-            }
-                
         }
         else
         {
-            FindObjectsOfType<Material>().ToList().ForEach(x => x.SetToHovered(null));
-            MouseChangingMaterialEvent?.Invoke(0);
-            currentlyHoveredMaterial = null;
+            if (gate)
+            {
+                gate = false;
+                ExitMaterial(lastMaterial);
+            }
+            return null;
         }
 
+        return lastMaterial;
     }
 
-    IEnumerator CheckForItemCoroutine()
+    bool CheckIfLastMaterialIsEqualToCurrentlyHoveredOne(Material material)
     {
-        yield return new WaitForSeconds(checkDelay);
-        CheckIfMouseHoverMaterial();
-        StartCoroutine(CheckForItemCoroutine());
+        if (lastMaterial != null)
+            return lastMaterial.Equals(material);
+        else
+            return false;
+
+    }
+
+    void EnterMaterial(Material material)
+    {
+        if (_equipItem.currentMaterial != null) _materialProjection.projection.CheckIfMouseHovers(1);
+        lastMaterial = material;
+        material.materialState = MaterialState.Possible;
+        currentlyHoveredMaterial = lastMaterial;
+    }
+
+    void ExitMaterial(Material material)
+    {
+        if (_equipItem.currentMaterial != null) _materialProjection.projection.CheckIfMouseHovers(0);
+        currentlyHoveredMaterial = null;
+        if (material != null) material.materialState = MaterialState.Normal;
     }
 }
+
+

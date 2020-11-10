@@ -54,6 +54,9 @@ public class MouseClickHandler : MonoBehaviour
             //We click on a material
             if(_hoverMaterial.currentlyHoveredMaterial != null)
                 _equipItem.TryEquip(_hoverMaterial.currentlyHoveredMaterial);
+                
+            
+                
         }
         
     }

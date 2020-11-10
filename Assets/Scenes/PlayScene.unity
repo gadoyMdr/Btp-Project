@@ -560,7 +560,6 @@ GameObject:
   - component: {fileID: 704180145}
   - component: {fileID: 704180147}
   - component: {fileID: 704180148}
-  - component: {fileID: 704180150}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -620,18 +619,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   pauseCanvas: {fileID: 1809770392}
---- !u!114 &704180150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 704180144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a326d9955208e92439a760104d9aebbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &800713882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,7 +1038,7 @@ GameObject:
   - component: {fileID: 1202590114}
   - component: {fileID: 1202590115}
   - component: {fileID: 1202590116}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: ProjectionPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62600011b26acb46b451d3e2ae16d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipItem: {fileID: 7921842511798012546}
+  hoverMaterial: {fileID: 7921842511798012559}
   isProjectionOverlapping: 0
 --- !u!4 &1214463173 stripped
 Transform:
@@ -1378,7 +1365,7 @@ GameObject:
   - component: {fileID: 1638568673}
   - component: {fileID: 1638568675}
   - component: {fileID: 1638568674}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2189,7 +2176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b539ba943060e54bbf9dbeddcef7627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkDelay: 0.1
+  checkDelay: 0.0001
   maxRange: 5
   currentlyHoveredMaterial: {fileID: 0}
 --- !u!114 &7921842511798012560

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(EquipItem))]
-[RequireComponent(typeof(GameObjectHoverDetection))]
 [RequireComponent(typeof(HoverMaterial))]
 public class MaterialProjection : MonoBehaviour
 {
@@ -15,14 +14,13 @@ public class MaterialProjection : MonoBehaviour
     private float range = 5f;
 
     private HoverMaterial _hoverMaterial;
-    private GameObjectHoverDetection _hoverDetection;
     private EquipItem _equipItem;
+    private Vector2 worldCursorPos = Vector2.zero;
 
     private void Awake()
     {
         _equipItem = GetComponent<EquipItem>();
         _hoverMaterial = GetComponent<HoverMaterial>();
-        _hoverDetection = GetComponent<GameObjectHoverDetection>();
     }
 
     private void OnEnable()
@@ -39,9 +37,10 @@ public class MaterialProjection : MonoBehaviour
 
     private void Update()
     {
-        if(_equipItem.currentMaterial != null)
+        worldCursorPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        if (_equipItem.currentMaterial != null)
         {
-            if(Vector2.Distance(transform.position, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue())) < range)
+            if(Vector2.Distance(transform.position, worldCursorPos) < range)
             {
                 projection.ToggleProjection(true);
                 SetProjectionPoint();
@@ -63,8 +62,8 @@ public class MaterialProjection : MonoBehaviour
 
     void SetProjectionPoint()
     {
-        Vector2 worldPos;
-        _hoverDetection.DetectHoverGameObject(out worldPos);
+        Vector2 worldPos = worldCursorPos;
+
         projection.transform.rotation = _equipItem.currentMaterial.transform.rotation;
         projection.transform.position = worldPos;
 
@@ -78,6 +77,7 @@ public class MaterialProjection : MonoBehaviour
     void SetProjection()
     {
         projection.CreateProjection(_equipItem.currentMaterial);
+        projection.UpdateIsOverlaping(0);
         projection.transform.localScale = _equipItem.currentMaterial.transform.localScale;
     }
 }

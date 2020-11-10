@@ -7,28 +7,19 @@ public class Projection : MonoBehaviour
 {
     [SerializeField]
     private HoverMaterial hoverMaterial;
+
+
     public bool isProjectionOverlapping;
 
     BoxCollider2D boxCollider;
 
     public SpriteRenderer _spriteRenderer {get;set;}
 
-    
     private List<Collider2D> allColliders = new List<Collider2D>();
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void OnEnable()
-    {
-        hoverMaterial.MouseChangingMaterialEvent += CheckIfMouseHovers;
-    }
-
-    private void OnDisable()
-    {
-        hoverMaterial.MouseChangingMaterialEvent -= CheckIfMouseHovers;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -44,7 +35,7 @@ public class Projection : MonoBehaviour
         UpdateIsOverlaping(0);
     }
 
-    void CheckIfMouseHovers(int max)
+    public void CheckIfMouseHovers(int max)
     {
         if (allColliders.Count > 0)
             //Get the last material that entered the projection

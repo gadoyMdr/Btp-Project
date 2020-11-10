@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Hover
+public class MaterialState
 {
     public string name;
     public Color color;
+    public bool canBePickedUp;
+    public static MaterialState Impossible { get => new MaterialState("Impossible", new Color(255, 0, 0, 0.5f), false); }
 
-    public static Hover Impossible { get => new Hover("Impossible", new Color(255, 0, 0, 0.5f)); }
+    public static MaterialState Possible { get => new MaterialState("Possible", new Color(0, 255, 0, 0.5f), true); }
 
-    public static Hover Possible { get => new Hover("Possible", new Color(0, 255, 0, 0.5f)); }
+    public static MaterialState Normal { get => new MaterialState("Normal", new Color(255, 255, 255, 1f), false); }
 
-    public static Hover Normal { get => new Hover("Normal", new Color(255, 255, 255, 1f)); }
+    public static MaterialState Transparant { get => new MaterialState("Normal", new Color(255, 255, 255, 0.2f), false); }
 
-    public Hover(string name, Color color)
+    public MaterialState(string name, Color color, bool canBePickedUp)
     {
         this.name = name;
         this.color = color;
+        this.canBePickedUp = canBePickedUp;
     }
 }
