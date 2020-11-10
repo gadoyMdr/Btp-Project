@@ -48,6 +48,7 @@ public class EquipItem : MonoBehaviour
     {
         UnEquipEvent?.Invoke();
         currentMaterial.SwitchToDropped();
+        currentMaterial.gameObject.layer = LayerMask.NameToLayer("Material");
         currentMaterial = null;
     }
 
@@ -59,7 +60,7 @@ public class EquipItem : MonoBehaviour
     {
         if (materialToEquip.canBePickedUp)
         {
-            _placeMaterial.PlaceMaterialFunction(materialToEquip, currentMaterial.transform.position, currentMaterial.transform.rotation);
+            _placeMaterial.PlaceMaterialFunction(currentMaterial, materialToEquip.transform.position, currentMaterial.transform.rotation);
             ActuallyEquip(materialToEquip);
         }
         
@@ -68,7 +69,9 @@ public class EquipItem : MonoBehaviour
 
     //Equip
     void ActuallyEquip(Material materialToEquip)
-    {   
+    {
+        materialToEquip.gameObject.layer = LayerMask.NameToLayer("CarriedMaterial");
+
         currentMaterial = materialToEquip;
 
         currentMaterial.SwitchToPickedUp();

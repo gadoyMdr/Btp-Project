@@ -9,25 +9,31 @@ public class Material : MonoBehaviour
     [HideInInspector]
     public Rigidbody2D _rigidbody;
 
-    //used so we don't pick up the item when it's already picked up
-    
-    public bool isPickedUp = false;
-
     [HideInInspector]
     public SpriteRenderer _spriteRenderer;
 
-    private Color baseColor;
+    //used so we don't pick up the item when it's already picked up
+    public bool isPickedUp = false;
+
     public bool canBePickedUp;
+
+    private Hover Hover;
+    public Hover hover
+    {
+        get => Hover;
+        set
+        {
+            Hover = value;
+            UpdateHover();
+        }
+    }
+
+    
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
-
-    private void Start()
-    {
-        baseColor = _spriteRenderer.color;
     }
 
     public void SwitchToPickedUp()
@@ -48,18 +54,25 @@ public class Material : MonoBehaviour
     /// true = material in range
     /// </summary>
     /// <param name="value"></param>
+    /// 
+
+    void UpdateHover()
+    {
+
+    }
+
     public void SetToHovered(bool? value)
     {
         if (value.HasValue)
         {
             canBePickedUp = value.Value;
-            if (value.Value) _spriteRenderer.color = Color.green;
-            else _spriteRenderer.color = Color.red;
+            if (value.Value) _spriteRenderer.color = new Color(0, 255, 0, 0.4f);
+            else _spriteRenderer.color = new Color(255, 0, 0, 0.4f); ;
         }
         else
         {
             canBePickedUp = false;
-            _spriteRenderer.color = baseColor;
+            _spriteRenderer.color = Color.white;
         }
         
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,20 +31,27 @@ public class MouseClickHandler : MonoBehaviour
 
     void DoItsThing()
     {
+        //We're holding a material
         if(_equipItem.currentMaterial != null)
         {
-            if (_hoverMaterial.currentlyHoveredMaterial == null)
+            //We place it on the map
+            if (_hoverMaterial.currentlyHoveredMaterial == null && !_materialProjection.projection.isProjectionOverlapping)
             {
-                _placeMaterial.PlaceMaterialFunction(_equipItem.currentMaterial, _materialProjection.projectionPoint.position, _materialProjection.projectionPoint.rotation);
+                _placeMaterial.PlaceMaterialFunction(_equipItem.currentMaterial, _materialProjection.projection.transform.position, _materialProjection.projection.transform.rotation);
             }
+            //We switch with another material
 
-            if (_hoverMaterial.currentlyHoveredMaterial != null)
+
+
+            if (_hoverMaterial.currentlyHoveredMaterial != null && !_materialProjection.projection.isProjectionOverlapping)
             {
-                _equipItem.SwitchMaterial(_equipItem.currentMaterial);
+                _equipItem.SwitchMaterial(_hoverMaterial.currentlyHoveredMaterial);
             }
         }
+        //We're not holding any material
         else
         {
+            //We click on a material
             if(_hoverMaterial.currentlyHoveredMaterial != null)
                 _equipItem.TryEquip(_hoverMaterial.currentlyHoveredMaterial);
         }
