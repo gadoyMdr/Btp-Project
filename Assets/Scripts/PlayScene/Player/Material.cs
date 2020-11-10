@@ -6,11 +6,12 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Material : MonoBehaviour
 {
+    public SpriteRenderer _spriteRenderer;
+
     [HideInInspector]
     public Rigidbody2D _rigidbody;
 
-    [HideInInspector]
-    public SpriteRenderer _spriteRenderer;
+    public float price;
 
     //used so we don't pick up the item when it's already picked up
     public bool isPickedUp = false;
@@ -30,7 +31,6 @@ public class Material : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void SwitchToPickedUp()
