@@ -18,7 +18,7 @@ public class Material : MonoBehaviour
     private MaterialState MaterialState;
     public MaterialState materialState
     {
-        get => MaterialState;
+        get => MaterialState; 
         set
         {
             MaterialState = value;
@@ -26,7 +26,6 @@ public class Material : MonoBehaviour
         }
     }
 
-    
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -41,6 +40,7 @@ public class Material : MonoBehaviour
 
     public void SwitchToDropped()
     {
+        _rigidbody.velocity = Vector2.zero;
         isPickedUp = false;
         _rigidbody.gravityScale = 1;
     }
