@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5658447748746790072, guid: 0d044118aef7c544f809e489013506da, type: 3}
+      propertyPath: price
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5658447748746790073, guid: 0d044118aef7c544f809e489013506da, type: 3}
       propertyPath: m_Offset.y
       value: 0.0062493756

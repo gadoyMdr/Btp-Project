@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad72d66dfc7f4c42856212467f9f545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 5658447748746790074}
   _rigidbody: {fileID: 0}
-  _spriteRenderer: {fileID: 0}
+  price: 100
   isPickedUp: 0

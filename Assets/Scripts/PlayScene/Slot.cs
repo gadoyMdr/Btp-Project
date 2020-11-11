@@ -3,50 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+using System;
 
 public class Slot : MonoBehaviour
 {
-    public Material material;
-    public TextMeshProUGUI textMoney;
-    public Transform shopPos;
+    public static Action<Material> BuyRequest;
 
-    private Money money;
-    private Image _image;
+    [SerializeField]
+    private TextMeshProUGUI textPrice;
 
-    void Awake()
+    [SerializeField]
+    private Image materialImage;
+
+    private Material material;
+
+    public void SetParameters(Material material)
     {
-        _image = GetComponent<Image>();
-        money = FindObjectOfType<Money>();
+        materialImage.sprite = material._spriteRenderer.sprite;
+        textPrice.text = $"{material.price} $";
+        this.material = material;
     }
 
-    void Start()
-    {
-        if(material != null )
-            _image.sprite = material._spriteRenderer.sprite;
-    }
-
-    public void TryBuy()
-    {
-        if(money.moneyAmount >= material.price)
-        {
-            money.moneyAmount -= material.price;
-            DropMaterial();
-        }
-    }
-
-
-    void DropMaterial()
-    {
-        Material newMaterial = Instantiate(material, shopPos.position, Quaternion.identity);
-        newMaterial._rigidbody.AddForce(Vector2.up * 3, ForceMode2D.Impulse);
-    }
-
+    public void ClickOnSlot() => BuyRequest?.Invoke(material);
     
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
