@@ -30,8 +30,10 @@ public class WheelBarrow : MonoBehaviour, IGrabable
         set 
         { 
             IsInteractedWith = value;
-            if (value) TurnOff();
+            
+            if (value)TurnOff();
             else Trigger();
+
         }
     }
     
@@ -67,7 +69,7 @@ public class WheelBarrow : MonoBehaviour, IGrabable
 
         if (gatePlayerInRange != tempPlayerInRange)
         {
-            if (gatePlayerInRange) Trigger();
+            if (gatePlayerInRange && !isInteractedWith) Trigger();
             else TurnOff();
             tempPlayerInRange = gatePlayerInRange;
         }
