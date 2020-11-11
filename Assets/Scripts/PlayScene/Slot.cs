@@ -19,7 +19,7 @@ public class Slot : MonoBehaviour
 
     public void SetParameters(Material material)
     {
-        materialImage.sprite = material._spriteRenderer.sprite;
+        materialImage.sprite = material.shopSprite;
         textPrice.text = $"{material.price} $";
         this.material = material;
     }

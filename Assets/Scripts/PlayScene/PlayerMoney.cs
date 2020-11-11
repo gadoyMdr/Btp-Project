@@ -20,6 +20,11 @@ public class PlayerMoney : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        UpdateTextMoney();
+    }
+
     private void UpdateTextMoney() => moneyText.text = $"Money : { moneyAmount }";
     
 

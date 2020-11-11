@@ -178,6 +178,33 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""PlayerInteraction"",
+            ""id"": ""26e09ce1-9fce-4c1d-9320-5a7fc5228513"",
+            ""actions"": [
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""e5e42ecb-91bb-4485-8acc-6548092bd490"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d68271ef-c367-4b0b-98a8-20b6b7629a1d"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -197,6 +224,9 @@ public class @Controls : IInputActionCollection, IDisposable
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_LeftClick = m_Mouse.FindAction("LeftClick", throwIfNotFound: true);
+        // PlayerInteraction
+        m_PlayerInteraction = asset.FindActionMap("PlayerInteraction", throwIfNotFound: true);
+        m_PlayerInteraction_Grab = m_PlayerInteraction.FindAction("Grab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -398,6 +428,39 @@ public class @Controls : IInputActionCollection, IDisposable
         }
     }
     public MouseActions @Mouse => new MouseActions(this);
+
+    // PlayerInteraction
+    private readonly InputActionMap m_PlayerInteraction;
+    private IPlayerInteractionActions m_PlayerInteractionActionsCallbackInterface;
+    private readonly InputAction m_PlayerInteraction_Grab;
+    public struct PlayerInteractionActions
+    {
+        private @Controls m_Wrapper;
+        public PlayerInteractionActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Grab => m_Wrapper.m_PlayerInteraction_Grab;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerInteraction; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerInteractionActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerInteractionActions instance)
+        {
+            if (m_Wrapper.m_PlayerInteractionActionsCallbackInterface != null)
+            {
+                @Grab.started -= m_Wrapper.m_PlayerInteractionActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_PlayerInteractionActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_PlayerInteractionActionsCallbackInterface.OnGrab;
+            }
+            m_Wrapper.m_PlayerInteractionActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
+            }
+        }
+    }
+    public PlayerInteractionActions @PlayerInteraction => new PlayerInteractionActions(this);
     public interface IPlayerMovementsActions
     {
         void OnLeft(InputAction.CallbackContext context);
@@ -416,5 +479,9 @@ public class @Controls : IInputActionCollection, IDisposable
     public interface IMouseActions
     {
         void OnLeftClick(InputAction.CallbackContext context);
+    }
+    public interface IPlayerInteractionActions
+    {
+        void OnGrab(InputAction.CallbackContext context);
     }
 }

@@ -6,6 +6,11 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Material : MonoBehaviour
 {
+    [SerializeField]
+    private Sprite inGameSprite;
+
+    public Sprite shopSprite;
+
     public SpriteRenderer _spriteRenderer;
 
     [HideInInspector]
@@ -25,6 +30,11 @@ public class Material : MonoBehaviour
             MaterialState = value;
             UpdateState();
         }
+    }
+
+    private void Start()
+    {
+        _spriteRenderer.sprite = inGameSprite;
     }
 
     private void Awake()
