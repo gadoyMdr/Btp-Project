@@ -3,7 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
+public class Layer
+{
+    public string layerName;
+    public Color color;
+    public int layer;
+
+    public static Layer firstPlan { get => new Layer("FirstPlan", Color.white, 3); }
+
+    public static Layer secondPlan { get => new Layer("SecondPlan", new Color(133,133,133,1), 2); }
+
+    public Layer(string layerName, Color color, int layer)
+    {
+        this.layerName = layerName;
+        this.color = color;
+        this.layer = layer;
+    }
+}
+
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Hover))]
 public class Material : MonoBehaviour
 {
     [SerializeField]
@@ -21,6 +41,9 @@ public class Material : MonoBehaviour
     //used so we don't pick up the item when it's already picked up
     public bool isPickedUp = false;
 
+    private Hover _hover;
+
+
     private MaterialState MaterialState;
     public MaterialState materialState
     {
@@ -32,28 +55,16 @@ public class Material : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        _spriteRenderer.sprite = inGameSprite;
-    }
-
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    public void SwitchToPickedUp()
+    private void Start()
     {
-        isPickedUp = true;
-        _rigidbody.gravityScale = 0;
+        _spriteRenderer.sprite = inGameSprite;
     }
-
-    public void SwitchToDropped()
-    {
-        _rigidbody.velocity = Vector2.zero;
-        isPickedUp = false;
-        _rigidbody.gravityScale = 1;
-    }
+    
 
     /// <summary>
     /// Change the color to green if true or red if false and to normal if not hovered
@@ -61,6 +72,13 @@ public class Material : MonoBehaviour
     /// </summary>
     /// <param name="value"></param>
     /// 
+
+    public void ApplyLayer(Layer layer)
+    {
+        gameObject.layer = LayerMask.NameToLayer(layer.layerName);
+        _spriteRenderer.color = layer.color;
+        _spriteRenderer.sortingOrder = layer.layer;
+    }
 
     void UpdateState()
     {

@@ -10,7 +10,7 @@ public class PopupText : MonoBehaviour
 
     private void Update()
     {
-        transform.position = transformToFollow.position;
+        transform.position = new Vector3(transformToFollow.position.x, transformToFollow.position.y);
     }
 
     public void ChangeText(string text)

@@ -7,5 +7,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    public Transform grabPoint;
+    [Range(0, 50)]
+    public float armLenght;
 }

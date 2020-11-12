@@ -1,22 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(EquipItem))]
 public class MaterialController : MonoBehaviour
 {
-
-    private EquipItem _equipItem;
-
-    private void Awake() => _equipItem = GetComponent<EquipItem>();
-    
-
-    //Rotate with scroll wheel
-    public void RotateMaterial(float x)
+    public void RotateCurrentMaterial(float x)
     {
-        if (_equipItem.currentMaterial != null)
-            if (_equipItem.currentMaterial.TryGetComponent(out RotateMaterials rotateMaterials))
-                rotateMaterials.Rotate(x);
+        RotateMaterials material = FindObjectsOfType<RotateMaterials>().
+            Where(x => x.GetComponent<Interact>() != null).
+            Where(x => x.GetComponent<Interact>().isInteractedWith).
+            FirstOrDefault();
+
+        if(material != null)
+            material.Rotate(x);
+
     }
 }

@@ -41,7 +41,7 @@ public class ControlManager : MonoBehaviour
         controls.PlayerMovements.Down.performed += _ => playerCrouch.Crouch();
         controls.PlayerMovements.Down.performed += _ => playerCrouch.DeCrouch();
 
-        controls.PlayerMaterials.Scroll.performed += x => materialController.RotateMaterial(x.ReadValue<float>());
+        controls.PlayerMaterials.Scroll.performed += x => materialController.RotateCurrentMaterial(x.ReadValue<float>());
 
         controls.UI.TogglePause.performed += _ => playSceneUIManager.TogglePause(null);
         controls.UI.TogglePause.performed += _ => shop.CloseShop();

@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Shop : MonoBehaviour
+public class Shop : MonoBehaviour, IActionWhenInteractedWith
 {
+    public Action<GameObject, bool> ActionTriggerd { get; set; }
+
     [SerializeField]
     private List<Material> materialToSell = new List<Material>();
 
@@ -40,7 +43,7 @@ public class Shop : MonoBehaviour
     private void OnDisable() => Slot.BuyRequest -= TryBuy;
 
     public void OpenShop() 
-    { 
+    {
         shopCanvas.gameObject.SetActive(true);
         StaticVariables.IsAnyUIOn = true;
     }
@@ -68,5 +71,19 @@ public class Shop : MonoBehaviour
     {
         Material newMaterial = Instantiate(material, spawnTransform.position, Quaternion.identity, GameObject.Find("Materials").transform);
         newMaterial._rigidbody.AddForce(Vector2.one * 3, ForceMode2D.Impulse);
+    }
+
+    public void TriggerAction(object[] parameters) 
+    {
+        OpenShop();
+        ActionTriggerd?.Invoke(gameObject, true);
+    }
+
+
+
+    public void TurnOffAction()
+    {
+        CloseShop();
+        ActionTriggerd?.Invoke(gameObject, false);
     }
 }

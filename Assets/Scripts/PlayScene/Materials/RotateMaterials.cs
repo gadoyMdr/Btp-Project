@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof (Rigidbody2D))]
 public class RotateMaterials : MonoBehaviour
@@ -11,18 +13,15 @@ public class RotateMaterials : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
 
-
     //Called when any variable is changed in inspector
     private void OnValidate() => RoundNumberNextModulo();
-    
 
     private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
-    
 
     public void Rotate(float x)
     {
-        if(x > 0) _rigidbody.MoveRotation(_rigidbody.rotation + rotateStep);
-        if(x < 0) _rigidbody.MoveRotation(_rigidbody.rotation - rotateStep);
+        if (x > 0) _rigidbody.MoveRotation(_rigidbody.rotation + rotateStep);
+        if (x < 0) _rigidbody.MoveRotation(_rigidbody.rotation - rotateStep);
     }
 
     //Consider refactoring

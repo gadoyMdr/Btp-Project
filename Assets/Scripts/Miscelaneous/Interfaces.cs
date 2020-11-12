@@ -1,34 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public interface IHoverable
-{
-
-}
-
-public interface IClickable
-{
-
-}
+using UnityEngine.InputSystem;
 
 public interface Iinteractable
 {
-    Transform handleTransform { get; set; }
-    Player player { get; set; }
-    float radiusRange { get; set; }
-    bool canBeInteractedWith { get; set; }
-    bool isInteractedWith { get; set; }
-    void CheckIfPlayerWithingRange();
+    public Action<bool> CanBeInteractedWith { get; set; }
 }
 
-public interface IGrabable : Iinteractable
+public interface IVisualWhenInteractedWith
 {
-    Rigidbody2D rigidbody2D { get; set; }
+    void TriggerVisual(object[] parameters);
+    void TurnOffVisual();
 }
 
-public interface IActionable : Iinteractable
+public interface IActionWhenInteractedWith
 {
-    void Trigger();
-    void TurnOff();
+    public Action<GameObject, bool> ActionTriggerd { get; set; }
+    void TriggerAction(object[] parameters);
+    void TurnOffAction();
 }
+
