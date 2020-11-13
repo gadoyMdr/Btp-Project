@@ -79,7 +79,7 @@ public class PlayerMove : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(
              transform.transform.rotation.x,
-             direction < 0 ? 0 : 180,
+             direction < 0 ? 180 : 0,
              transform.transform.rotation.y
             );
         }

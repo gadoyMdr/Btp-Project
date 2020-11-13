@@ -36,6 +36,7 @@ public class LayerSelection : MonoBehaviour
     {
         changeLayer.performed += _ => ChangeLayer();
         allLayers = Type.GetType("Layer").GetProperties();
+        ChangeLayer();
         UpdateTextLayer();
     }
 

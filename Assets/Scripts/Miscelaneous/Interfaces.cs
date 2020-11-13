@@ -11,6 +11,7 @@ public interface Iinteractable
 
 public interface IVisualWhenInteractedWith
 {
+    public Action<GameObject, bool> VisualTriggered { get; set; }
     void TriggerVisual(object[] parameters);
     void TurnOffVisual();
 }
